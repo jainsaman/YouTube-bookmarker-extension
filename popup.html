@@ -2,17 +2,26 @@
 <script type="module" src="popup.js"></script>
 
 <div class="container">
-  <div>
-    <div class="title">Your bookmarks for this video</div>
-
-    <div class="error-title">
-      <p>This is not a YouTube Video Page.</p>
-      <span
-        >Kindly open a YouTube Video to continue adding bookmarks with our
-        extension.</span
-      >
-    </div>
-
-    <div class="bookmarks" id="bookmarks"></div>
+  <div class="weather">
+    <p class="titleWeather">Today's weather</p>
+    <button class="getWeather" id="getWeather">Get</button>
   </div>
+  <div class="weatherData">
+    <div class="weatherDataContent">City: <span id="city"></span></div>
+    <div class="weatherDataContent">
+      Temperature: <span id="temperature"></span>
+    </div>
+  </div>
+
+  <div class="title">Your bookmarks for this video</div>
+
+  <div class="error-title">
+    <p>This is not a YouTube Video Page.</p>
+    <span
+      >Kindly open a YouTube Video to continue adding bookmarks with our
+      extension.</span
+    >
+  </div>
+
+  <div class="bookmarks" id="bookmarks"></div>
 </div>

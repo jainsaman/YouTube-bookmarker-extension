@@ -1,4 +1,26 @@
 import { getCurrentTabURL } from "./utils.js";
+var apiKey = "";
+var baseUrl = "";
+
+const cities = [
+  "London",
+  "New York",
+  "Mumbai",
+  "Tokyo",
+  "Sydney",
+  "Paris",
+  "Berlin",
+  "Moscow",
+  "Cairo",
+  "Jaipur",
+  "Rome",
+  "Beijing",
+  "Mexico City",
+  "Toronto",
+  "Los Angeles",
+  "Kolkata",
+  "Las Vegas",
+];
 
 // adding a new bookmark row to the popup
 const addNewBookmark = (bookmarksElement, bookmark) => {
@@ -81,6 +103,39 @@ const setBookmarkAttributes = (src, eventListener, controlParentElement) => {
   controlParentElement.appendChild(controlElement);
 };
 
+const getWeatherData = async (cities) => {
+  const getWeatherBtn = document.getElementById("getWeather");
+  const cityData = document.getElementById("city");
+  const temperatureData = document.getElementById("temperature");
+
+  function selectRandomCity(array) {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
+  }
+
+  getWeatherBtn.addEventListener("click", async () => {
+    const randomCity = selectRandomCity(cities);
+
+    cityData.innerText = "Loading...";
+    temperatureData.innerText = "Loading...";
+
+    const response = await fetch(
+      `${baseUrl}?q=${randomCity}&appid=${apiKey}&units=metric`
+    ).then((response) => response.json());
+
+    console.log("City: ", randomCity);
+    showWeatherData(response);
+  });
+};
+
+const showWeatherData = async (weather) => {
+  const cityData = document.getElementById("city");
+  const temperatureData = document.getElementById("temperature");
+
+  cityData.innerText = weather.name;
+  temperatureData.innerText = Math.round(weather.main.temp) + "°C";
+};
+
 document.addEventListener("DOMContentLoaded", async () => {
   const activeTab = await getCurrentTabURL();
   const queryParameters = activeTab.url.split("?")[1];
@@ -90,6 +145,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const title = document.getElementsByClassName("title")[0];
   const errorTitle = document.getElementsByClassName("error-title")[0];
+
+  chrome.storage.local.get(["apiKey", "apiBaseUrl"], (result) => {
+    apiKey = result.apiKey;
+    baseUrl = result.apiBaseUrl;
+    getWeatherData(cities);
+  });
 
   if (activeTab.url.includes("youtube.com/watch") && currentVideo) {
     title.style.display = "block";

@@ -4,6 +4,56 @@
   background-color: white;
 }
 
+.weather {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  margin: 0;
+}
+
+.weather .titleWeather {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.weather button.getWeather {
+  background-color: white;
+  border: 1px solid #314d3e;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.weather button.getWeather:hover {
+  background-color: #f3f3f3;
+}
+
+.weather button.getWeather:active {
+  background-color: #e6e6e6;
+}
+
+.weatherData {
+  padding: 8px;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weatherDataContent {
+  width: 50%;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.weatherDataContent span {
+  font-size: 12px;
+  font-weight: bold;
+  color: black;
+}
+
 .title {
   font-size: 14px;
   font-weight: bold;
