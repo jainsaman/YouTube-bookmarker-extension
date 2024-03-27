@@ -1,15 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .container {
-  width: 320px;
+  width: 360px;
   color: #314d3e;
-  background-color: white;
+  background-color: #faf8fa;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.header {
+  font-size: 20px;
+  font-weight: 700;
+  padding: 8px 8px 0;
 }
 
 .weather {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px;
   margin: 0;
+}
+
+.weatherBox {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background-color: #aeadae25;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.weatherBox .updateWeather {
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.weatherBox .updateWeather.updating {
+  animation: rotate 1s linear infinite;
+}
+
+.weatherBox .weatherImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background-color: #00254d;
+  margin-top: 4px;
+  display: none;
+}
+
+.weatherBox .weatherImage img {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.weatherDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.weatherDetails .weatherTitle {
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .weather .titleWeather {
@@ -35,10 +100,8 @@
 }
 
 .weatherData {
-  padding: 8px;
   margin: 0;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -57,12 +120,12 @@
 .title {
   font-size: 14px;
   font-weight: bold;
-  padding: 8px;
+  padding: 8px 8px 0;
 }
 
 .error-title {
   display: none;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   padding: 8px;
 }
@@ -89,14 +152,14 @@
 }
 
 .bookmarks {
-  margin: 5px 5px;
-  padding: 3px;
+  display: none;
+  padding: 0 8px;
 }
 
 .bookmark {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 6px;
   background-color: white;
   border: 1px solid #00254d;
   border-radius: 4px;
@@ -107,8 +170,56 @@
   font-weight: 500;
 }
 
+.bookmark .bookmarkContent {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bookmark .titleEditor {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.bookmark .titleEditor input {
+  font-size: 12px;
+  margin: 0;
+  padding: 4px;
+  flex-grow: 1;
+}
+
+.bookmark .titleEditor button {
+  background-color: #00254d;
+  color: #faf8fa;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.bookmark .titleEditor button:hover {
+  opacity: 0.9;
+}
+
+.bookmark .titleEditor button:active {
+  opacity: 0.7;
+}
+
 .bookmark-title {
   padding-left: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.bookmark-title p {
+  margin: 0;
 }
 
 .bookmark-controls img {
@@ -122,4 +233,13 @@
   align-items: center;
   gap: 8px;
   padding: 0 2px;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

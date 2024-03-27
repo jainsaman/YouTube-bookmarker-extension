@@ -2,17 +2,7 @@
 <script type="module" src="popup.js"></script>
 
 <div class="container">
-  <div class="weather">
-    <p class="titleWeather">Today's weather</p>
-    <button class="getWeather" id="getWeather">Get</button>
-  </div>
-  <div class="weatherData">
-    <div class="weatherDataContent">City: <span id="city"></span></div>
-    <div class="weatherDataContent">
-      Temperature: <span id="temperature"></span>
-    </div>
-  </div>
-
+  <div class="header">My YT Bookmarks</div>
   <div class="title">Your bookmarks for this video</div>
 
   <div class="error-title">
@@ -24,4 +14,27 @@
   </div>
 
   <div class="bookmarks" id="bookmarks"></div>
+
+  <div class="weatherBox">
+    <div class="weatherImage">
+      <img alt="weather" id="weatherImage" />
+    </div>
+    <div class="weatherDetails">
+      <div class="weatherTitle">Today's Weather</div>
+      <div class="weatherData">
+        <div class="weatherDataContent">
+          Weather: <span id="weather"></span>
+        </div>
+        <div class="weatherDataContent">
+          Temperature: <span id="temperature"></span>
+        </div>
+      </div>
+    </div>
+    <img
+      class="updateWeather"
+      id="updateWeather"
+      src="assets/update.png"
+      alt="Update"
+    />
+  </div>
 </div>

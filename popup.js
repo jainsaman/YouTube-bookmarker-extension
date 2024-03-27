@@ -2,33 +2,26 @@ import { getCurrentTabURL } from "./utils.js";
 var apiKey = "";
 var baseUrl = "";
 
-const cities = [
-  "London",
-  "New York",
-  "Mumbai",
-  "Tokyo",
-  "Sydney",
-  "Paris",
-  "Berlin",
-  "Moscow",
-  "Cairo",
-  "Jaipur",
-  "Rome",
-  "Beijing",
-  "Mexico City",
-  "Toronto",
-  "Los Angeles",
-  "Kolkata",
-  "Las Vegas",
-];
-
 // adding a new bookmark row to the popup
 const addNewBookmark = (bookmarksElement, bookmark) => {
   const bookmarkTiTleElement = document.createElement("div");
+  const bookmarkTimestamp = document.createElement("p");
+  const bookmarkTitle = document.createElement("p");
+  const bookmarkContentElement = document.createElement("div");
   const newBookmarkElement = document.createElement("div");
   const controlElements = document.createElement("div");
 
-  bookmarkTiTleElement.textContent = bookmark.desc;
+  bookmarkTitle.textContent = bookmark.title;
+  bookmarkTimestamp.textContent = bookmark.desc;
+
+  if (bookmark.title === "") {
+    bookmarkTitle.display = "none";
+    bookmarkTiTleElement.style.justifyContent = "center";
+  } else {
+    bookmarkTitle.style.fontWeight = "700";
+    bookmarkTiTleElement.style.justifyContent = "space-between";
+  }
+
   bookmarkTiTleElement.className = "bookmark-title";
 
   controlElements.className = "bookmark-controls";
@@ -37,16 +30,25 @@ const addNewBookmark = (bookmarksElement, bookmark) => {
   newBookmarkElement.className = "bookmark";
   newBookmarkElement.setAttribute("timestamp", bookmark.time);
 
+  bookmarkContentElement.className = "bookmarkContent";
+
   setBookmarkAttributes("play", onPlay, controlElements);
   setBookmarkAttributes("delete", onDelete, controlElements);
 
-  newBookmarkElement.appendChild(bookmarkTiTleElement);
-  newBookmarkElement.appendChild(controlElements);
+  bookmarkTiTleElement.appendChild(bookmarkTitle);
+  bookmarkTiTleElement.appendChild(bookmarkTimestamp);
+
+  bookmarkContentElement.appendChild(bookmarkTiTleElement);
+  bookmarkContentElement.appendChild(controlElements);
+
+  newBookmarkElement.appendChild(bookmarkContentElement);
+
   bookmarksElement.appendChild(newBookmarkElement);
 };
 
 const viewBookmarks = (currentBookmarks = []) => {
   const bookmarksElement = document.getElementById("bookmarks");
+  bookmarksElement.style.display = "block";
   bookmarksElement.innerHTML = "";
 
   if (currentBookmarks.length > 0) {
@@ -66,7 +68,8 @@ const viewBookmarks = (currentBookmarks = []) => {
 
 const onPlay = async (e) => {
   const activeTab = await getCurrentTabURL();
-  const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
+  const bookmarkTime =
+    e.target.parentNode.parentNode.parentNode.getAttribute("timestamp");
 
   chrome.tabs.sendMessage(activeTab.id, {
     type: "PLAY",
@@ -76,7 +79,8 @@ const onPlay = async (e) => {
 
 const onDelete = async (e) => {
   const activeTab = await getCurrentTabURL();
-  const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
+  const bookmarkTime =
+    e.target.parentNode.parentNode.parentNode.getAttribute("timestamp");
 
   const bookmarkElementToDelete = document.getElementById(
     "bookmark-" + bookmarkTime
@@ -103,37 +107,46 @@ const setBookmarkAttributes = (src, eventListener, controlParentElement) => {
   controlParentElement.appendChild(controlElement);
 };
 
-const getWeatherData = async (cities) => {
-  const getWeatherBtn = document.getElementById("getWeather");
-  const cityData = document.getElementById("city");
+const getWeatherData = async () => {
+  const weatherData = document.getElementById("weather");
   const temperatureData = document.getElementById("temperature");
+  const updateWeatherBtn = document.getElementById("updateWeather");
 
-  function selectRandomCity(array) {
-    const randomIndex = Math.floor(Math.random() * array.length);
-    return array[randomIndex];
-  }
+  updateWeatherBtn.addEventListener("click", async () => {
+    updateWeatherBtn.classList.toggle("updating");
+    const city = "Gwalior";
+    console.log("hello");
 
-  getWeatherBtn.addEventListener("click", async () => {
-    const randomCity = selectRandomCity(cities);
-
-    cityData.innerText = "Loading...";
+    weatherData.innerText = "Loading...";
     temperatureData.innerText = "Loading...";
 
     const response = await fetch(
-      `${baseUrl}?q=${randomCity}&appid=${apiKey}&units=metric`
+      `${baseUrl}?q=${city}&appid=${apiKey}&units=metric`
     ).then((response) => response.json());
 
-    console.log("City: ", randomCity);
-    showWeatherData(response);
+    setTimeout(() => {
+      showWeatherData(response);
+      console.log(response);
+    }, 2000);
   });
 };
 
-const showWeatherData = async (weather) => {
-  const cityData = document.getElementById("city");
+const showWeatherData = async (response) => {
+  const weatherData = document.getElementById("weather");
   const temperatureData = document.getElementById("temperature");
+  const imgSrc = document.getElementById("weatherImage");
+  const weatherImage = document.querySelector(".weatherImage");
+  const updateWeatherBtn = document.getElementById("updateWeather");
 
-  cityData.innerText = weather.name;
-  temperatureData.innerText = Math.round(weather.main.temp) + "°C";
+  weatherData.innerText = response.weather[0].main;
+  imgSrc.setAttribute(
+    "src",
+    "https://openweathermap.org/img/wn/" + response.weather[0].icon + ".png"
+  );
+
+  weatherImage.style.display = "block";
+  temperatureData.innerText = Math.round(response.main.temp) + "°C";
+  updateWeatherBtn.classList.toggle("updating");
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -149,7 +162,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   chrome.storage.local.get(["apiKey", "apiBaseUrl"], (result) => {
     apiKey = result.apiKey;
     baseUrl = result.apiBaseUrl;
-    getWeatherData(cities);
+    getWeatherData();
   });
 
   if (activeTab.url.includes("youtube.com/watch") && currentVideo) {
